@@ -66,7 +66,40 @@ class Posting_List():
 ########################################################################################################
 class Positional_Index():
     def __init__(self) :
-        pass
+        self.file
+        self.stuff
+        self.token_list
+
+    def read_file(self,filename):
+
+        with open(filename, 'r', encoding ="ascii", errors ="surrogateescape") as f:
+            self.stuff = f.read()
+        f.close()
+
+        self.stuff = self.remove_header_footer(self.stuff)
+
+    def remove_header_footer(self,final_string):
+        new_final_string = ""
+        tokens = final_string.split('\n\n')
+
+        for token in tokens[1:-1]:
+            new_final_string += token+" "
+    
+    def preprocessing(self,final_string):
+        # Tokenize.
+        tokenizer = TweetTokenizer()
+        token_list = tokenizer.tokenize(final_string)
+    
+        # Remove punctuations.
+        table = str.maketrans('', '', '\t')
+        self.token_list = [word.translate(table) for word in token_list]
+        punctuations = (string.punctuation).replace("'", "")
+        trans_table = str.maketrans('', '', punctuations)
+        stripped_words = [word.translate(trans_table) for word in token_list]
+        self.token_list = [str for str in stripped_words if str]
+    
+        # Change to lowercase.
+        self.token_list =[word.lower() for word in token_list]
 
 
 
